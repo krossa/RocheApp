@@ -1,0 +1,36 @@
+===================
+     ZADANIE
+===================
+
+0. W bazie danych znajdują się użytkownicy i zwierzęta
+    Utworzyć aplikację konsolową .NET Core 3.1, zawierającą trzy główne metody, do odczytu, do zapisu danych oraz do aktualizacji (opisane poniżej).
+    Implementacja powinna uwzględniać możliwość równoczesnego i wielokrotnego uruchamiania przez wielu użytkowników.
+    Nie zależy nam na mocno sformalizowanej strukturze projektu, a na działającym rozwiązaniu poniższych zadań. Preferowana droga uruchamiania metod - wywołania z testów jednostkowych, nie oczekujemy UI.      
+    Jako wynik oczekujemy kodu źródłowego oraz zaktualizowanego skryptu tworzącego bazę (schema + data), w formie pozwalającej na   uruchomienie kodu.
+
+I. Aktualizacja
+    1. Rozszerzyć tabelę User o kolumnę ExperiencePoints, która z każdą kolejną aktualizacją będzie inkrementowana.
+    2. Stworzyć metodę, która pozwoli zaktualizować wszystkich użytkowników n-krotnie, w sposób zapewniający integralność danych (gdzie n wskazane będzie parametrem):
+        a. Metoda aktualizująca powinna zwrócić zaktualizowaną wartość ExperiencePoints oraz TimeStampValue:
+        b. Każdy kolejny użytkownik w danej iteracji powinien mieć wartość ExperiencePoints zwiększaną o wartość wyliczoną ze wzoru:
+            nr_iteracji * indeks_użytkownika_w_danej_iteracji
+        c. Jeżeli wartość ExperiencePoints przekroczy 1000, automatycznie powinien utracić (mniejszą ;]) połowę swoich zwierząt
+
+II. Odczyt
+    Utworzyć metodę, która zwraca listę użytkowników wraz z listą ich zwierząt:
+    1. Metoda ma umożliwiać filtrowanie po polach Status oraz FirstName
+    2. Oprócz listy użytkowników metoda powinna zwracać:
+        -TotalRows - liczbę wierszy spełniających kryteria,
+        -TimeStampValue
+    3. Rozwiązanie powinno przewidywać nie więcej niż 2 zapytania do obsługi pojedynczego uruchomienia metody
+    
+III. Zapis
+    Dodać zapis użytkowników bazy danych:
+        1. Zwracać GUID zapisanego rekordu oraz TimeStampValue    
+        
+IV. Walidacja. Opisać jak zaprojektować walidację zapisu użytkowników - w pełni testowalną i zapewniającą pełną integralność danych w procesie zapisu.
+
+Dostęp do danych należy zrealizować poprzez Entity Framework Core lub Dapper. Nieużywanie Entity Fameworka będzie plusem. 
+
+Uwagi: Bazę danych można dowolnie rozszerzać w razie potrzeby, z wyłączeniem triggerów.
+
