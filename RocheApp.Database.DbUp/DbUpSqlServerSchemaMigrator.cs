@@ -1,5 +1,5 @@
 ﻿using DbUp;
-using DbUp.Engine;
+using DbUp.Engine.Output;
 using DbUp.Helpers;
 using System;
 using System.Reflection;
@@ -10,21 +10,19 @@ namespace RocheApp.Database.DbUp
     {
         public void Execute(string connectionString)
         {
-            EnsureDatabase.For.SqlDatabase(connectionString);
+            EnsureDatabase.For.SqlDatabase(connectionString, new NoOpUpgradeLog());
 
             EnsureJournalSchema(connectionString);
 
-            var result = DeployChanges.To
+            DeployChanges.To
                 .SqlDatabase(connectionString)
                 .JournalToSqlTable("DbUp", "SchemaVersions")
                 .WithScriptsEmbeddedInAssembly(typeof(IMigrator).Assembly, s => !s.Contains("initial_data"))
-                .LogToConsole()
+                .LogToNowhere()
                 .WithTransactionPerScript()
                 .WithExecutionTimeout(TimeSpan.FromMinutes(10))
                 .Build()
                 .PerformUpgrade();
-
-            HandleResult(result);
         }
 
         private void EnsureJournalSchema(string connectionString) =>
@@ -32,28 +30,9 @@ namespace RocheApp.Database.DbUp
                 .SqlDatabase(connectionString)
                 .JournalTo(new NullJournal())
                 .WithScriptsEmbeddedInAssembly(Assembly.GetExecutingAssembly())
-                .LogToConsole()
+                .LogToNowhere()
                 .WithTransactionPerScript()
                 .Build()
                 .PerformUpgrade();
-
-        private void HandleResult(DatabaseUpgradeResult result)
-        {
-            if (!result.Successful)
-            {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine(result.Error);
-                Console.ResetColor();
-#if DEBUG
-                Console.ReadLine();
-#endif
-                return;
-            }
-
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("Success!");
-            Console.ResetColor();
-            return;
-        }
     }
 }
