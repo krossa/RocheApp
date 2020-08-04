@@ -75,7 +75,7 @@ namespace RocheApp.Integration.Tests
         }
         
         [Fact]
-        public async Task Does_Not_Delete_Pets_When_User_Has_Only_One()
+        public async Task Does_Not_Delete_Pets_When_User_Has_Only_One_Pet()
         {
             using IDbConnection db = new SqlConnection(ConnectionString);
             db.Execute(@"

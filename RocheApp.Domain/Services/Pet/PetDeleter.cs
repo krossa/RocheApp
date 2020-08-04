@@ -18,13 +18,17 @@ namespace RocheApp.Domain.Services.Pet
 
         public async Task DeleteAsync(Models.User user)
         {
-            if (!user.Pets.Any()) return;
-            if (user.ExperiencePoints <= _settings.PointsThresholdForDeletingPets) return;
+            if (!CanDelete(user)) return;
 
             var count = user.Pets.Count / 2;
 
             var petIdsToDelete = user.Pets.Take(count).Select(p => p.PetId);
             await _petRepository.DeleteAsync(user.UserId, petIdsToDelete);
         }
+
+        private bool CanDelete(Models.User user) =>
+            user.PetsDeleted == 0 && user.Pets.Any() &&
+            user.ExperiencePoints > _settings.PointsThresholdForDeletingPets;
+
     }
 }
