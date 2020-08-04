@@ -1,8 +1,6 @@
 
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RocheApp", "RocheApp\RocheApp.csproj", "{290BABF7-2C9F-4906-919B-497546268CEA}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleClient", "ConsoleClient\ConsoleClient.csproj", "{A4CC23D2-093A-4463-BF11-94CF6078C9D1}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Database", "Database", "{2B058F56-F4C3-496E-968F-D6B5F93823F0}"
@@ -13,16 +11,22 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RocheApp.Database.DbUp", "R
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RocheApp.Database.Runner", "RocheApp.Database.Runner\RocheApp.Database.Runner.csproj", "{DFB41142-738C-4075-8055-7DFBFF03982F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RocheApp.Domain", "RocheApp.Domain\RocheApp.Domain.csproj", "{A79FAD33-D1DC-4119-BA97-14A74BEA5910}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RocheApp.DataAccess.Dapper", "RocheApp.DataAccess.Dapper\RocheApp.DataAccess.Dapper.csproj", "{7EDE3565-D742-48F4-BEF2-28DCD75727D8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{40D8825E-7C33-4ADD-8AAD-FEE87AE3F31D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Integration", "Integration", "{D65AED77-CBCD-4403-8008-148FB77C7087}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RocheApp.Integration.Tests", "RocheApp.Integration.Tests\RocheApp.Integration.Tests.csproj", "{E6635EEA-B060-464B-8F60-EEB9D7247E29}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{290BABF7-2C9F-4906-919B-497546268CEA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{290BABF7-2C9F-4906-919B-497546268CEA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{290BABF7-2C9F-4906-919B-497546268CEA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{290BABF7-2C9F-4906-919B-497546268CEA}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A4CC23D2-093A-4463-BF11-94CF6078C9D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A4CC23D2-093A-4463-BF11-94CF6078C9D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A4CC23D2-093A-4463-BF11-94CF6078C9D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -39,10 +43,24 @@ Global
 		{DFB41142-738C-4075-8055-7DFBFF03982F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DFB41142-738C-4075-8055-7DFBFF03982F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DFB41142-738C-4075-8055-7DFBFF03982F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A79FAD33-D1DC-4119-BA97-14A74BEA5910}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A79FAD33-D1DC-4119-BA97-14A74BEA5910}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A79FAD33-D1DC-4119-BA97-14A74BEA5910}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A79FAD33-D1DC-4119-BA97-14A74BEA5910}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7EDE3565-D742-48F4-BEF2-28DCD75727D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7EDE3565-D742-48F4-BEF2-28DCD75727D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7EDE3565-D742-48F4-BEF2-28DCD75727D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7EDE3565-D742-48F4-BEF2-28DCD75727D8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E6635EEA-B060-464B-8F60-EEB9D7247E29}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E6635EEA-B060-464B-8F60-EEB9D7247E29}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E6635EEA-B060-464B-8F60-EEB9D7247E29}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E6635EEA-B060-464B-8F60-EEB9D7247E29}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{3F5DE496-7E65-4B3E-BF84-2D7D248DBC7B} = {2B058F56-F4C3-496E-968F-D6B5F93823F0}
 		{F99594A1-C273-436E-9F57-81834E214372} = {2B058F56-F4C3-496E-968F-D6B5F93823F0}
 		{DFB41142-738C-4075-8055-7DFBFF03982F} = {2B058F56-F4C3-496E-968F-D6B5F93823F0}
+		{D65AED77-CBCD-4403-8008-148FB77C7087} = {40D8825E-7C33-4ADD-8AAD-FEE87AE3F31D}
+		{E6635EEA-B060-464B-8F60-EEB9D7247E29} = {D65AED77-CBCD-4403-8008-148FB77C7087}
 	EndGlobalSection
 EndGlobal

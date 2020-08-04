@@ -6,7 +6,7 @@ namespace RocheApp.Database.DbUp
     {
         public static void AddRocheAppDatabaseDbUp(this IServiceCollection services)
         {
-            services.AddScoped<IMigrator, DbUpMigrator>();
+            services.AddScoped<IMigrator, DbUpSqlServerMigrator>();
         }
 
     }

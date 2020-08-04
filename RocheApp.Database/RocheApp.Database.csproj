@@ -9,8 +9,13 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove="Migrations\202007301900.sql" />
+    <None Remove="Migrations\202007301900_initial_schema.sql" />
+    <None Remove="Migrations\202007311345_initial_data.sql" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\202007301900_initial.sql" />
+    <EmbeddedResource Include="Migrations\202007301900_initial_schema.sql" />
+    <EmbeddedResource Include="Migrations\202007311345_initial_data.sql" />
+    <EmbeddedResource Include="Migrations\202008021900_add_ExperiencePoints.sql" />
+    <EmbeddedResource Include="Migrations\202008031100_add_PetsDeleted.sql" />
   </ItemGroup>
 </Project>
