@@ -21,7 +21,7 @@ namespace RocheApp.Integration.Tests
             var result = createService.Create(user);
 
             Assert.Equal(id, result.UserId);
-            Assert.Equal(8,result.RowVersion.Length);
+            Assert.Equal(8, result.RowVersion.Length);
         }
 
         [Fact]

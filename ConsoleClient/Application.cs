@@ -17,12 +17,10 @@ namespace ConsoleClient
             _userUpdater = userUpdater;
             _userCreator = userCreator;
         }
-        
+
         public void Run()
         {
-            var option = -1;
-
-            while (option != 0)
+            do
             {
                 Console.Clear();
                 Console.WriteLine("----------------------------");
@@ -34,49 +32,27 @@ namespace ConsoleClient
                 Console.WriteLine("2) Update");
                 Console.WriteLine("3) Create");
                 Console.WriteLine("0) Exit");
-                Console.WriteLine("----------------------------\n");    
-                
+                Console.WriteLine("----------------------------\n");
+
                 var line = Console.ReadLine();
-                if(!int.TryParse(line, out option)) continue;
+                if (!int.TryParse(line, out var option)) continue;
 
                 switch (option)
                 {
                     case 1:
                         Search();
-                        PressAnyKey();
                         break;
                     case 2:
                         Update();
-                        PressAnyKey();
                         break;
                     case 3:
                         Create();
-                        PressAnyKey();
                         break;
+                    case 0:
+                        GoodBuy();
+                        return;
                 }
-                
-            }
-            
-            
-
-            var userServiceResult = _userService.Users(UserFilter.EmptyFilter);
-            Console.WriteLine($"{userServiceResult.TotalUserCount} {userServiceResult.TotalPetCount}");
-
-            // using var scope = _serviceProvider.CreateScope();
-            //
-            // var userService = scope.ServiceProvider.GetService<IUserService>();
-            // // var res = userService.Users(UserFilter.EmptyFilter);
-            // var res = userService.Users(new UserFilter {FirstName = "ian", Status = 0});
-            // Console.WriteLine($"{res.TotalUserCount} {res.TotalPetCount}");
-            //
-            // var userUpdater = scope.ServiceProvider.GetService<IUserUpdater>();
-            // var updaterResult = userUpdater.Update(3).ToList();
-            // Console.WriteLine(updaterResult.First().ExperiencePoints);
-            //
-            // var userCreator = scope.ServiceProvider.GetService<IUserCreator>();
-            // var creatorResult = userCreator.Create(new User
-            //     {FirstName = "Tom", LastName = "Ron", Status = 1, ExperiencePoints = 1, PetsDeleted = 0});
-            // Console.WriteLine($"{creatorResult.UserId} {creatorResult.RowVersion}");
+            } while (true);
         }
 
         private void PressAnyKey()
@@ -84,6 +60,13 @@ namespace ConsoleClient
             Console.WriteLine("Press any key.");
             Console.ReadKey();
         }
+
+        private void GoodBuy()
+        {
+            Console.WriteLine("Press any key.");
+            Console.ReadKey();
+        }
+
         private void Search()
         {
             Console.WriteLine("!!! SEARCH !!!");
@@ -94,7 +77,7 @@ namespace ConsoleClient
             Console.WriteLine("Enter Status:");
             var statusText = Console.ReadLine();
             byte? status = null;
-            if(!string.IsNullOrWhiteSpace(statusText))
+            if (!string.IsNullOrWhiteSpace(statusText))
                 status = byte.Parse(statusText);
             var result = _userService.Users(new UserFilter {FirstName = firstName, Status = status});
             Console.ForegroundColor = ConsoleColor.Green;
@@ -102,12 +85,15 @@ namespace ConsoleClient
             Console.ResetColor();
             foreach (var user in result.Users)
             {
-                Console.WriteLine($"{user.FirstName} {user.LastName} - ExperiencePoints: {user.ExperiencePoints}, PetsDeleted: {user.PetsDeleted}, Status: {user.Status}, RowVersion: {BitConverter.ToString(user.RowVersion)}");
+                Console.WriteLine(
+                    $"{user.FirstName} {user.LastName} - ExperiencePoints: {user.ExperiencePoints}, PetsDeleted: {user.PetsDeleted}, Status: {user.Status}, RowVersion: {BitConverter.ToString(user.RowVersion)}");
                 foreach (var pet in user.Pets)
                 {
                     Console.WriteLine($"    {pet.Name}");
                 }
             }
+
+            PressAnyKey();
         }
 
         private void Update()
@@ -118,8 +104,11 @@ namespace ConsoleClient
             var result = _userUpdater.Update(iterations);
             foreach (var item in result)
             {
-                Console.WriteLine($"ExperiencePoints: {item.ExperiencePoints} RowVersion: {BitConverter.ToString(item.RowVersion)}");
+                Console.WriteLine(
+                    $"ExperiencePoints: {item.ExperiencePoints} RowVersion: {BitConverter.ToString(item.RowVersion)}");
             }
+
+            PressAnyKey();
         }
 
         private void Create()
@@ -135,7 +124,10 @@ namespace ConsoleClient
             Console.WriteLine("Enter ExperiencePoints:");
             user.ExperiencePoints = int.Parse(Console.ReadLine());
             var result = _userCreator.Create(user);
+            Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine($"UserId: {result.UserId} RowVersion: {BitConverter.ToString(result.RowVersion)}");
+            Console.ResetColor();
+            PressAnyKey();
         }
     }
 }

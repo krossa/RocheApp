@@ -22,7 +22,7 @@ namespace RocheApp.Integration.Tests
             var updateService = scope.ServiceProvider.GetService<IUserUpdater>();
 
             var result = updateService.Update(1).ToList();
-            
+
             Assert.Equal(2, result.Count);
             Assert.Equal(1001, result.ElementAt(0).ExperiencePoints);
             Assert.Equal(8, result.ElementAt(0).RowVersion.Length);
@@ -72,7 +72,7 @@ namespace RocheApp.Integration.Tests
 
             Assert.Equal(3, result.TotalPetCount);
         }
-        
+
         [Fact]
         public void Does_Not_Delete_Pets_When_User_Has_Only_One()
         {
@@ -155,7 +155,7 @@ namespace RocheApp.Integration.Tests
 
             Assert.Equal(4, result.TotalPetCount);
         }
-        
+
         [Theory]
         [InlineData(1, 1001, 102, 3)]
         [InlineData(2, 1003, 106, 9)]
@@ -178,7 +178,7 @@ namespace RocheApp.Integration.Tests
             var updateService = scope.ServiceProvider.GetService<IUserUpdater>();
 
             var result = updateService.Update(count).ToList();
-            
+
             Assert.Equal(jon, result.ElementAt(0).ExperiencePoints);
             Assert.Equal(ron, result.ElementAt(1).ExperiencePoints);
             Assert.Equal(tim, result.ElementAt(2).ExperiencePoints);

@@ -1,8 +1,8 @@
-﻿using System;
-using System.Reflection;
-using DbUp;
+﻿using DbUp;
 using DbUp.Engine;
 using DbUp.Helpers;
+using System;
+using System.Reflection;
 
 namespace RocheApp.Database.DbUp
 {
@@ -15,27 +15,27 @@ namespace RocheApp.Database.DbUp
             EnsureJournalSchema(connectionString);
 
             var result = DeployChanges.To
-              .SqlDatabase(connectionString)
-              .JournalToSqlTable("DbUp", "SchemaVersions")
-              .WithScriptsEmbeddedInAssembly(typeof(IMigrator).Assembly, s => !s.Contains("initial_data"))
-              .LogToConsole()
-              .WithTransactionPerScript()
-              .WithExecutionTimeout(TimeSpan.FromMinutes(10))
-              .Build()
-              .PerformUpgrade();
+                .SqlDatabase(connectionString)
+                .JournalToSqlTable("DbUp", "SchemaVersions")
+                .WithScriptsEmbeddedInAssembly(typeof(IMigrator).Assembly, s => !s.Contains("initial_data"))
+                .LogToConsole()
+                .WithTransactionPerScript()
+                .WithExecutionTimeout(TimeSpan.FromMinutes(10))
+                .Build()
+                .PerformUpgrade();
 
             HandleResult(result);
         }
 
         private void EnsureJournalSchema(string connectionString) =>
             DeployChanges.To
-              .SqlDatabase(connectionString)
-              .JournalTo(new NullJournal())
-              .WithScriptsEmbeddedInAssembly(Assembly.GetExecutingAssembly())
-              .LogToConsole()
-              .WithTransactionPerScript()
-              .Build()
-              .PerformUpgrade();
+                .SqlDatabase(connectionString)
+                .JournalTo(new NullJournal())
+                .WithScriptsEmbeddedInAssembly(Assembly.GetExecutingAssembly())
+                .LogToConsole()
+                .WithTransactionPerScript()
+                .Build()
+                .PerformUpgrade();
 
         private void HandleResult(DatabaseUpgradeResult result)
         {
@@ -55,6 +55,5 @@ namespace RocheApp.Database.DbUp
             Console.ResetColor();
             return;
         }
-
     }
 }

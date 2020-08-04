@@ -14,15 +14,16 @@ namespace RocheApp.Domain.Services.Pet
             _settings = settings;
             _petRepository = petRepository;
         }
+
         public void Delete(Models.User user)
         {
-            if(!user.Pets.Any()) return;
-            if(user.ExperiencePoints <= _settings.PointsThresholdForDeletingPets) return;
-            
+            if (!user.Pets.Any()) return;
+            if (user.ExperiencePoints <= _settings.PointsThresholdForDeletingPets) return;
+
             var count = user.Pets.Count / 2;
-            
-             var petIdsToDelete = user.Pets.Take(count).Select(p => p.PetId);
-             _petRepository.Delete(user.UserId, petIdsToDelete);
+
+            var petIdsToDelete = user.Pets.Take(count).Select(p => p.PetId);
+            _petRepository.Delete(user.UserId, petIdsToDelete);
         }
     }
 }

@@ -22,7 +22,7 @@ namespace ConsoleClient
         private static void RegisterServices()
         {
             var config = LoadConfiguration();
-            
+
             var services = new ServiceCollection();
             services.AddTransient<Application>();
             services.AddRocheAppDomain(config);

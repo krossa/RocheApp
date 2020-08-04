@@ -1,7 +1,7 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace RocheApp.Database.Runner
 {
@@ -16,7 +16,8 @@ namespace RocheApp.Database.Runner
             this.configuration = configuration;
         }
 
-        public Task StartAsync(CancellationToken cancellationToken) => Task.Run(() => migrator.Execute(configuration["DatabaseModuleConnectionString"]));
+        public Task StartAsync(CancellationToken cancellationToken) =>
+            Task.Run(() => migrator.Execute(configuration["DatabaseModuleConnectionString"]));
 
         public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;
     }

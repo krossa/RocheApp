@@ -8,6 +8,5 @@ namespace RocheApp.Database.DbUp
         {
             services.AddScoped<IMigrator, DbUpSqlServerMigrator>();
         }
-
     }
 }

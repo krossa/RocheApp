@@ -15,7 +15,7 @@ namespace RocheApp.Domain
             services.AddScoped<IUserCreator, UserCreator>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IUserUpdater, UserUpdater>();
-            
+
             services.AddSingleton(configuration.GetSection(nameof(ApplicationSettings)).Get<ApplicationSettings>());
         }
     }

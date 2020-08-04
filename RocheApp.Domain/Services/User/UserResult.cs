@@ -6,6 +6,6 @@ namespace RocheApp.Domain.Services.User
     {
         public int TotalUserCount { get; set; } = 0;
         public int TotalPetCount { get; set; } = 0;
-        public IEnumerable<Models.User>  Users { get; set; }
+        public IEnumerable<Models.User> Users { get; set; }
     }
 }
