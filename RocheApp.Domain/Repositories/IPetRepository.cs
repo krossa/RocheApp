@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace RocheApp.Domain.Repositories
 {
     public interface IPetRepository
     {
-        void Delete(Guid userId, IEnumerable<Guid> petIds);
+        Task DeleteAsync(Guid userId, IEnumerable<Guid> petIds);
     }
 }

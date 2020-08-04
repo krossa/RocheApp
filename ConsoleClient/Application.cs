@@ -2,6 +2,7 @@ using RocheApp.Domain.Models;
 using RocheApp.Domain.Services.User;
 using RocheApp.Domain.Services.User.Interfaces;
 using System;
+using System.Threading.Tasks;
 
 namespace ConsoleClient
 {
@@ -18,7 +19,7 @@ namespace ConsoleClient
             _userCreator = userCreator;
         }
 
-        public void Run()
+        public async Task Run()
         {
             do
             {
@@ -40,16 +41,16 @@ namespace ConsoleClient
                 switch (option)
                 {
                     case 1:
-                        Search();
+                        await Search();
                         break;
                     case 2:
-                        Update();
+                        await Update();
                         break;
                     case 3:
-                        Create();
+                        await Create();
                         break;
                     case 0:
-                        GoodBuy();
+                        Goodbye();
                         return;
                 }
             } while (true);
@@ -61,13 +62,12 @@ namespace ConsoleClient
             Console.ReadKey();
         }
 
-        private void GoodBuy()
+        private void Goodbye()
         {
-            Console.WriteLine("Press any key.");
-            Console.ReadKey();
+            Console.WriteLine("Goodbye!");
         }
 
-        private void Search()
+        private async Task Search()
         {
             Console.WriteLine("!!! SEARCH !!!");
             Console.WriteLine("Enter FirstName:");
@@ -79,7 +79,7 @@ namespace ConsoleClient
             byte? status = null;
             if (!string.IsNullOrWhiteSpace(statusText))
                 status = byte.Parse(statusText);
-            var result = _userService.Users(new UserFilter {FirstName = firstName, Status = status});
+            var result = await _userService.UsersAsync(new UserFilter {FirstName = firstName, Status = status});
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine($"Number of users: {result.TotalUserCount}, number of pets: {result.TotalPetCount}");
             Console.ResetColor();
@@ -96,13 +96,13 @@ namespace ConsoleClient
             PressAnyKey();
         }
 
-        private void Update()
+        private async Task Update()
         {
             Console.WriteLine("!!! UPDATE !!!");
             Console.WriteLine("Enter iterations count:");
             var iterations = int.Parse(Console.ReadLine());
-            var result = _userUpdater.Update(iterations);
-            foreach (var item in result)
+            var result = _userUpdater.UpdateAsync(iterations);
+            await foreach (var item in result)
             {
                 Console.WriteLine(
                     $"ExperiencePoints: {item.ExperiencePoints} RowVersion: {BitConverter.ToString(item.RowVersion)}");
@@ -111,7 +111,7 @@ namespace ConsoleClient
             PressAnyKey();
         }
 
-        private void Create()
+        private async Task Create()
         {
             Console.WriteLine("!!! CREATE !!!");
             var user = new User();
@@ -123,7 +123,7 @@ namespace ConsoleClient
             user.Status = byte.Parse(Console.ReadLine());
             Console.WriteLine("Enter ExperiencePoints:");
             user.ExperiencePoints = int.Parse(Console.ReadLine());
-            var result = _userCreator.Create(user);
+            var result = await _userCreator.CreateAsync(user);
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine($"UserId: {result.UserId} RowVersion: {BitConverter.ToString(result.RowVersion)}");
             Console.ResetColor();

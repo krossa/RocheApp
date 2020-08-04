@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using RocheApp.DataAccess.Dapper;
 using RocheApp.Domain;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace ConsoleClient
 {
@@ -10,12 +11,12 @@ namespace ConsoleClient
     {
         private static ServiceProvider _serviceProvider;
 
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
             RegisterServices();
             using var scope = _serviceProvider.CreateScope();
             var app = scope.ServiceProvider.GetService<Application>();
-            app.Run();
+            await app.Run();
             DisposeServices();
         }
 

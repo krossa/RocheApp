@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Threading.Tasks;
 
 namespace RocheApp.DataAccess.Dapper.Repositories
 {
@@ -16,7 +17,7 @@ namespace RocheApp.DataAccess.Dapper.Repositories
             _settings = settings;
         }
 
-        public void Delete(Guid userId, IEnumerable<Guid> petIds)
+        public async Task DeleteAsync(Guid userId, IEnumerable<Guid> petIds)
         {
             const string query = @"
                 DECLARE @PetIdsToDelete TABLE(PetId UNIQUEIDENTIFIER)
@@ -38,7 +39,7 @@ namespace RocheApp.DataAccess.Dapper.Repositories
                 COMMIT";
             
             using IDbConnection db = new SqlConnection(_settings.ConnectionString);
-            db.Execute(query, new {PetIds = petIds, UserId = userId});
+            await db.ExecuteAsync(query, new {PetIds = petIds, UserId = userId});
         }
     }
 }

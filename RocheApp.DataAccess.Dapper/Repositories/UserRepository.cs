@@ -8,6 +8,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace RocheApp.DataAccess.Dapper.Repositories
 {
@@ -20,14 +21,14 @@ namespace RocheApp.DataAccess.Dapper.Repositories
             _settings = settings;
         }
 
-        public UserCreatorResult Create(User user)
+        public async Task<UserCreatorResult> CreateAsync(User user)
         {
             const string query = @"INSERT [dbo].[User] ([UserId], [FirstName], [LastName], [Status], [PetsDeleted], [ExperiencePoints]) 
                         OUTPUT INSERTED.[RowVersion]
                         VALUES (@UserId, @FirstName, @LastName, @Status, @PetsDeleted, @ExperiencePoints)";
 
             using IDbConnection db = new SqlConnection(_settings.ConnectionString);
-            var rowVersion = db.Query<byte[]>(query, user);
+            var rowVersion = await db.QueryAsync<byte[]>(query, user);
             return new UserCreatorResult
             {
                 UserId = user.UserId,
@@ -35,7 +36,7 @@ namespace RocheApp.DataAccess.Dapper.Repositories
             };
         }
 
-        public void Update(int multiplier)
+        public async Task UpdateAsync(int multiplier)
         {
             const string query = @"UPDATE x
                         SET x.ExperiencePoints = (x.order_value * @Multiplier) + x.ExperiencePoints
@@ -45,10 +46,10 @@ namespace RocheApp.DataAccess.Dapper.Repositories
                         ) x;";
 
             using IDbConnection db = new SqlConnection(_settings.ConnectionString);
-            db.Execute(query, new {Multiplier = multiplier});
+            await db.ExecuteAsync(query, new {Multiplier = multiplier});
         }
         
-        public UserResult Users(UserFilter filter)
+        public async Task<UserResult> UsersAsync(UserFilter filter)
         {
             var query = new StringBuilder();
             query.Append(@"SELECT * FROM [dbo].[User] as u
@@ -68,7 +69,7 @@ namespace RocheApp.DataAccess.Dapper.Repositories
             using IDbConnection db = new SqlConnection(_settings.ConnectionString);
             var userDict = new Dictionary<Guid, User>();
             var userResult = new UserResult();
-            userResult.Users = db.Query<User, Pet, User>(query.ToString(),
+            userResult.Users = (await db.QueryAsync<User, Pet, User>(query.ToString(),
                     (user, pet) =>
                     {
                         if (!userDict.TryGetValue(user.UserId, out var userEntry))
@@ -86,7 +87,7 @@ namespace RocheApp.DataAccess.Dapper.Repositories
                         return userEntry;
                     },
                     filter,
-                    splitOn: "PetId")
+                    splitOn: "PetId"))
                 .Distinct();
 
             return userResult;

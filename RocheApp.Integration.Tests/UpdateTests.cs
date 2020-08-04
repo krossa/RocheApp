@@ -5,6 +5,7 @@ using RocheApp.Domain.Services.User.Interfaces;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace RocheApp.Integration.Tests
@@ -12,7 +13,7 @@ namespace RocheApp.Integration.Tests
     public class UpdateTests : DbBaseTest
     {
         [Fact]
-        public void Returns_Correct_Result()
+        public async Task Returns_Correct_Result()
         {
             using IDbConnection db = new SqlConnection(ConnectionString);
             db.Execute(@"
@@ -21,7 +22,7 @@ namespace RocheApp.Integration.Tests
             using var scope = ServiceProvider.CreateScope();
             var updateService = scope.ServiceProvider.GetService<IUserUpdater>();
 
-            var result = updateService.Update(1).ToList();
+            var result =  await updateService.UpdateAsync(1).ToListAsync();
 
             Assert.Equal(2, result.Count);
             Assert.Equal(1001, result.ElementAt(0).ExperiencePoints);
@@ -31,7 +32,7 @@ namespace RocheApp.Integration.Tests
         }
 
         [Fact]
-        public void Deletes_Equal_Half_Of_Pets()
+        public async Task Deletes_Equal_Half_Of_Pets()
         {
             using IDbConnection db = new SqlConnection(ConnectionString);
             db.Execute(@"
@@ -44,15 +45,15 @@ namespace RocheApp.Integration.Tests
             using var scope = ServiceProvider.CreateScope();
             var updateService = scope.ServiceProvider.GetService<IUserUpdater>();
             var userService = scope.ServiceProvider.GetService<IUserService>();
-
-            _ = updateService.Update(1).ToList();
-            var result = userService.Users(UserFilter.EmptyFilter);
-
+        
+            _ = await updateService.UpdateAsync(1).ToListAsync();
+            var result = await userService.UsersAsync(UserFilter.EmptyFilter);
+        
             Assert.Equal(2, result.TotalPetCount);
         }
-
+        
         [Fact]
-        public void Deletes_Smaller_Half_Of_Pets()
+        public async Task Deletes_Smaller_Half_Of_Pets()
         {
             using IDbConnection db = new SqlConnection(ConnectionString);
             db.Execute(@"
@@ -66,15 +67,15 @@ namespace RocheApp.Integration.Tests
             using var scope = ServiceProvider.CreateScope();
             var updateService = scope.ServiceProvider.GetService<IUserUpdater>();
             var userService = scope.ServiceProvider.GetService<IUserService>();
-
-            _ = updateService.Update(1).ToList();
-            var result = userService.Users(UserFilter.EmptyFilter);
-
+        
+            _ = await updateService.UpdateAsync(1).ToListAsync();
+            var result = await userService.UsersAsync(UserFilter.EmptyFilter);
+        
             Assert.Equal(3, result.TotalPetCount);
         }
-
+        
         [Fact]
-        public void Does_Not_Delete_Pets_When_User_Has_Only_One()
+        public async Task Does_Not_Delete_Pets_When_User_Has_Only_One()
         {
             using IDbConnection db = new SqlConnection(ConnectionString);
             db.Execute(@"
@@ -84,15 +85,15 @@ namespace RocheApp.Integration.Tests
             using var scope = ServiceProvider.CreateScope();
             var updateService = scope.ServiceProvider.GetService<IUserUpdater>();
             var userService = scope.ServiceProvider.GetService<IUserService>();
-
-            _ = updateService.Update(1).ToList();
-            var result = userService.Users(UserFilter.EmptyFilter);
-
+        
+            _ = await updateService.UpdateAsync(1).ToListAsync();
+            var result = await userService.UsersAsync(UserFilter.EmptyFilter);
+        
             Assert.Equal(1, result.TotalPetCount);
         }
-
+        
         [Fact]
-        public void Does_Not_Delete_Pets_After_Reaching_1000_Points()
+        public async Task Does_Not_Delete_Pets_After_Reaching_1000_Points()
         {
             using IDbConnection db = new SqlConnection(ConnectionString);
             db.Execute(@"
@@ -105,16 +106,16 @@ namespace RocheApp.Integration.Tests
             using var scope = ServiceProvider.CreateScope();
             var updateService = scope.ServiceProvider.GetService<IUserUpdater>();
             var userService = scope.ServiceProvider.GetService<IUserService>();
-
-            _ = updateService.Update(1).ToList();
-            var result = userService.Users(UserFilter.EmptyFilter);
-
+        
+            _ = await updateService.UpdateAsync(1).ToListAsync();
+            var result = await userService.UsersAsync(UserFilter.EmptyFilter);
+        
             Assert.Equal(4, result.TotalPetCount);
             Assert.Equal(1000, result.Users.First().ExperiencePoints);
         }
-
+        
         [Fact]
-        public void Delete_Pets_After_Reaching_1001_Points()
+        public async Task Delete_Pets_After_Reaching_1001_Points()
         {
             using IDbConnection db = new SqlConnection(ConnectionString);
             db.Execute(@"
@@ -127,16 +128,16 @@ namespace RocheApp.Integration.Tests
             using var scope = ServiceProvider.CreateScope();
             var updateService = scope.ServiceProvider.GetService<IUserUpdater>();
             var userService = scope.ServiceProvider.GetService<IUserService>();
-
-            _ = updateService.Update(1).ToList();
-            var result = userService.Users(UserFilter.EmptyFilter);
-
+        
+            _ = await updateService.UpdateAsync(1).ToListAsync();
+            var result = await userService.UsersAsync(UserFilter.EmptyFilter);
+        
             Assert.Equal(2, result.TotalPetCount);
             Assert.Equal(1001, result.Users.First().ExperiencePoints);
         }
-
+        
         [Fact]
-        public void Does_Not_Delete_Pets_Twice()
+        public async Task Does_Not_Delete_Pets_Twice()
         {
             using IDbConnection db = new SqlConnection(ConnectionString);
             db.Execute(@"
@@ -149,13 +150,13 @@ namespace RocheApp.Integration.Tests
             using var scope = ServiceProvider.CreateScope();
             var updateService = scope.ServiceProvider.GetService<IUserUpdater>();
             var userService = scope.ServiceProvider.GetService<IUserService>();
-
-            _ = updateService.Update(1).ToList();
-            var result = userService.Users(UserFilter.EmptyFilter);
-
+        
+            _ = await updateService.UpdateAsync(1).ToListAsync();
+            var result = await userService.UsersAsync(UserFilter.EmptyFilter);
+        
             Assert.Equal(4, result.TotalPetCount);
         }
-
+        
         [Theory]
         [InlineData(1, 1001, 102, 3)]
         [InlineData(2, 1003, 106, 9)]
@@ -167,7 +168,7 @@ namespace RocheApp.Integration.Tests
         [InlineData(8, 1036, 172, 108)]
         [InlineData(9, 1045, 190, 135)]
         [InlineData(10, 1055, 210, 165)]
-        public void Updates_Points_Correctly(int count, int jon, int ron, int tim)
+        public async Task Updates_Points_Correctly(int count, int jon, int ron, int tim)
         {
             using IDbConnection db = new SqlConnection(ConnectionString);
             db.Execute(@"
@@ -176,9 +177,9 @@ namespace RocheApp.Integration.Tests
                 INSERT [dbo].[User] ([UserId], [FirstName], [LastName], [Status], [PetsDeleted], [ExperiencePoints]) VALUES (N'11111113-b9ca-4cac-9c32-06a46179ecf3', N'Tim', N'Tom', 0, 0, 0)");
             using var scope = ServiceProvider.CreateScope();
             var updateService = scope.ServiceProvider.GetService<IUserUpdater>();
-
-            var result = updateService.Update(count).ToList();
-
+        
+            var result = await updateService.UpdateAsync(count).ToListAsync();
+        
             Assert.Equal(jon, result.ElementAt(0).ExperiencePoints);
             Assert.Equal(ron, result.ElementAt(1).ExperiencePoints);
             Assert.Equal(tim, result.ElementAt(2).ExperiencePoints);

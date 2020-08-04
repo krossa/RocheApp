@@ -6,6 +6,7 @@ using System;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace RocheApp.Integration.Tests
@@ -29,12 +30,12 @@ namespace RocheApp.Integration.Tests
         }
 
         [Fact]
-        public void Gets_All_Records()
+        public async Task Gets_All_Records()
         {
             using var scope = ServiceProvider.CreateScope();
             var userService = scope.ServiceProvider.GetService<IUserService>();
 
-            var result = userService.Users(UserFilter.EmptyFilter);
+            var result = await userService.UsersAsync(UserFilter.EmptyFilter);
 
             Assert.Equal(3, result.TotalUserCount);
             Assert.Equal(6, result.TotalPetCount);
@@ -45,12 +46,12 @@ namespace RocheApp.Integration.Tests
         }
 
         [Fact]
-        public void Gets_Correct_Data()
+        public async Task Gets_Correct_Data()
         {
             using var scope = ServiceProvider.CreateScope();
             var userService = scope.ServiceProvider.GetService<IUserService>();
 
-            var result = userService.Users(UserFilter.EmptyFilter);
+            var result = await userService.UsersAsync(UserFilter.EmptyFilter);
 
             var user = result.Users.First();
             Assert.Equal(Guid.Parse("11111111-b9ca-4cac-9c32-06a46179ecf3"), user.UserId);
@@ -66,12 +67,12 @@ namespace RocheApp.Integration.Tests
         }
 
         [Fact]
-        public void Filters_Records_On_FirstName()
+        public async Task Filters_Records_On_FirstName()
         {
             using var scope = ServiceProvider.CreateScope();
             var userService = scope.ServiceProvider.GetService<IUserService>();
 
-            var result = userService.Users(new UserFilter {FirstName = "om"});
+            var result = await userService.UsersAsync(new UserFilter {FirstName = "om"});
             Assert.Equal(2, result.TotalUserCount);
             Assert.Equal(3, result.TotalPetCount);
             Assert.Equal(2, result.Users.Count());
@@ -80,12 +81,12 @@ namespace RocheApp.Integration.Tests
         }
 
         [Fact]
-        public void Filters_Records_On_Status()
+        public async Task Filters_Records_On_Status()
         {
             using var scope = ServiceProvider.CreateScope();
             var userService = scope.ServiceProvider.GetService<IUserService>();
 
-            var result = userService.Users(new UserFilter {Status = 1});
+            var result = await userService.UsersAsync(new UserFilter {Status = 1});
             Assert.Equal(1, result.TotalUserCount);
             Assert.Equal(1, result.TotalPetCount);
             Assert.Single(result.Users);
@@ -93,12 +94,12 @@ namespace RocheApp.Integration.Tests
         }
 
         [Fact]
-        public void Filters_Records_On_FirstName_And_Status()
+        public async Task Filters_Records_On_FirstName_And_Status()
         {
             using var scope = ServiceProvider.CreateScope();
             var userService = scope.ServiceProvider.GetService<IUserService>();
 
-            var result = userService.Users(new UserFilter {FirstName = "om", Status = 1});
+            var result = await userService.UsersAsync(new UserFilter {FirstName = "om", Status = 1});
             Assert.Equal(1, result.TotalUserCount);
             Assert.Equal(1, result.TotalPetCount);
             Assert.Single(result.Users);

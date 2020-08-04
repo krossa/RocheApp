@@ -1,14 +1,15 @@
 ﻿using RocheApp.Domain.Models;
 using RocheApp.Domain.Services.User;
+using System.Threading.Tasks;
 
 namespace RocheApp.Domain.Repositories
 {
     public interface IUserRepository
     {
-        UserCreatorResult Create(User user);
+        Task<UserCreatorResult> CreateAsync(User user);
 
-        void Update(int multiplier);
+        Task UpdateAsync(int multiplier);
 
-        UserResult Users(UserFilter filter);
+        Task<UserResult> UsersAsync(UserFilter filter);
     }
 }

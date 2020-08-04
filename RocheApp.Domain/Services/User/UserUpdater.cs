@@ -2,6 +2,7 @@ using RocheApp.Domain.Repositories;
 using RocheApp.Domain.Services.Pet.Interfaces;
 using RocheApp.Domain.Services.User.Interfaces;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace RocheApp.Domain.Services.User
 {
@@ -22,17 +23,17 @@ namespace RocheApp.Domain.Services.User
             _petDeleter = petDeleter;
         }
 
-        public IEnumerable<UserUpdateResult> Update(int count)
+        public async IAsyncEnumerable<UserUpdateResult> UpdateAsync(int count)
         {
             for (var i = 1; i <= count; i++)
             {
-                _userRepository.Update(i);
+                await _userRepository.UpdateAsync(i);
             }
 
-            var users = _userService.Users(UserFilter.EmptyFilter);
+            var users = await _userService.UsersAsync(UserFilter.EmptyFilter);
             foreach (var user in users.Users)
             {
-                _petDeleter.Delete(user);
+                await _petDeleter.DeleteAsync(user);
                 yield return new UserUpdateResult
                     {ExperiencePoints = user.ExperiencePoints, RowVersion = user.RowVersion};
             }

@@ -4,6 +4,6 @@ namespace RocheApp.Domain.Services.User.Interfaces
 {
     public interface IUserUpdater
     {
-        IEnumerable<UserUpdateResult> Update(int count);
+        IAsyncEnumerable<UserUpdateResult> UpdateAsync(int count);
     }
 }

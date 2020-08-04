@@ -4,6 +4,7 @@ using RocheApp.Domain.Services.User;
 using RocheApp.Domain.Services.User.Interfaces;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace RocheApp.Integration.Tests
@@ -11,29 +12,29 @@ namespace RocheApp.Integration.Tests
     public class CreateTests : DbBaseTest
     {
         [Fact]
-        public void Returns_Correct_Result()
+        public async Task Returns_Correct_Result()
         {
             using var scope = ServiceProvider.CreateScope();
             var createService = scope.ServiceProvider.GetService<IUserCreator>();
             var id = Guid.NewGuid();
             var user = new User {UserId = id};
 
-            var result = createService.Create(user);
+            var result = await createService.CreateAsync(user);
 
             Assert.Equal(id, result.UserId);
             Assert.Equal(8, result.RowVersion.Length);
         }
 
         [Fact]
-        public void Creates_Record()
+        public async Task Creates_Record()
         {
             using var scope = ServiceProvider.CreateScope();
             var createService = scope.ServiceProvider.GetService<IUserCreator>();
             var userService = scope.ServiceProvider.GetService<IUserService>();
             var user = new User();
 
-            createService.Create(user);
-            var result = userService.Users(UserFilter.EmptyFilter);
+            await createService.CreateAsync(user);
+            var result = await userService.UsersAsync(UserFilter.EmptyFilter);
 
             Assert.Equal(1, result.TotalUserCount);
             Assert.Equal(0, result.TotalPetCount);
@@ -41,7 +42,7 @@ namespace RocheApp.Integration.Tests
         }
 
         [Fact]
-        public void Creates_Correct_Record()
+        public async Task Creates_Correct_Record()
         {
             using var scope = ServiceProvider.CreateScope();
             var createService = scope.ServiceProvider.GetService<IUserCreator>();
@@ -57,8 +58,8 @@ namespace RocheApp.Integration.Tests
                 ExperiencePoints = 137
             };
 
-            createService.Create(user);
-            var result = userService.Users(UserFilter.EmptyFilter);
+            await createService.CreateAsync(user);
+            var result = await userService.UsersAsync(UserFilter.EmptyFilter);
 
             var createdUser = result.Users.First();
             Assert.Equal(id, createdUser.UserId);

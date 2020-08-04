@@ -1,5 +1,6 @@
 using RocheApp.Domain.Repositories;
 using RocheApp.Domain.Services.User.Interfaces;
+using System.Threading.Tasks;
 
 namespace RocheApp.Domain.Services.User
 {
@@ -12,6 +13,6 @@ namespace RocheApp.Domain.Services.User
             _userRepository = userRepository;
         }
 
-        public UserResult Users(UserFilter filter) => _userRepository.Users(filter);
+        public async Task<UserResult> UsersAsync(UserFilter filter) => await _userRepository.UsersAsync(filter);
     }
 }
