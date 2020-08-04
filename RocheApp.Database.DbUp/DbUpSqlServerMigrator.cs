@@ -6,7 +6,7 @@ using DbUp.Helpers;
 
 namespace RocheApp.Database.DbUp
 {
-    public class DbUpMigrator : IMigrator
+    public class DbUpSqlServerMigrator : IMigrator
     {
         public void Execute(string connectionString)
         {
